@@ -152,7 +152,17 @@
                             </div>
 
                         </a>
+
+                        <div th:each="tag : ${post.tagList}" class="post-tags">
+                            <button>
+                                <a th:href="@{'/search/posts?query=' + ${tag.name}}" style="color: red; text-decoration: none;">
+                                    <span th:text="${tag.name}"></span>
+                                </a>
+                            </button>
                         </div>
+
+
+                    </div>
 
                         <div class="comment-count">
                             <a th:href="@{'/' + ${post.getSubReddit().getName()}+'/posts/' + ${post.getId()} +'/comments'}">

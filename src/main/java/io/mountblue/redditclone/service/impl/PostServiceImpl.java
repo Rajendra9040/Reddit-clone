@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
     public void createNewPost(Post post, Integer subredditId, String username, String tagNames) {
         Set<Tag> tagFromString = getTagFromString(tagNames);
         User user = userService.findByUsername(username);
-        System.out.println(tagFromString);
+
         SubReddit subReddit = subRedditService.findById(subredditId);
         post.setUser(user);
         post.setTagList(tagFromString);

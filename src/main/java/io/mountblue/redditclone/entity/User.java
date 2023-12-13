@@ -17,12 +17,12 @@ import java.util.HashSet;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -100,93 +100,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<SubReddit> getSubRedditList() {
-        return subRedditList;
-    }
-
-    public void setSubRedditList(List<SubReddit> subRedditList) {
-        this.subRedditList = subRedditList;
-    }
-
-    public List<VotePost> getVotePosts() {
-        return votePosts;
-    }
-
-    public void setVotePosts(List<VotePost> votePosts) {
-        this.votePosts = votePosts;
-    }
-
-    public Integer getKarma() {
-        return karma;
-    }
-
-    public void setKarma(Integer karma) {
-        this.karma = karma;
-    }
-
-    public List<VoteComment> getVoteComments() {
-        return voteComments;
-    }
-
-    public void setVoteComments(List<VoteComment> voteComments) {
-        this.voteComments = voteComments;
-    }
-
-    public List<Bookmark> getBookmarkList() {
-        return bookmarkList;
-    }
-
-    public void setBookmarkList(List<Bookmark> bookmarkList) {
-        this.bookmarkList = bookmarkList;
-    }
-
-    public Collection<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
     }
 }

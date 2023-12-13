@@ -75,6 +75,7 @@ public class UserController {
             return "signup";
         }
 
+        System.out.println("User Registered");
         userService.encodePassword(newUser);
         userService.save(newUser);
         userService.grantRoleToUser(newUser.getUsername(), "USER");
@@ -92,8 +93,7 @@ public class UserController {
                                   @PathVariable("username") String username,
                                   @PathVariable("action") String action,
                                   @AuthenticationPrincipal UserDetails userDetails
-    ) throws IOException {
-        if(userDetails == null || !userDetails.getUsername().equals(username)){
+    ) throws IOException {        if(userDetails == null || !userDetails.getUsername().equals(username)){
             return "accessDenied";
         }
         User user = userService.findByUsername(username);

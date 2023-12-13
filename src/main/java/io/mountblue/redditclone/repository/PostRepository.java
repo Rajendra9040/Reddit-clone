@@ -2,6 +2,7 @@ package io.mountblue.redditclone.repository;
 
 import io.mountblue.redditclone.entity.Post;
 import io.mountblue.redditclone.entity.SubReddit;
+import io.mountblue.redditclone.entity.Tag;
 import io.mountblue.redditclone.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -48,4 +49,15 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
             @Param("subReddit") SubReddit subReddit,
             @Param("startDate") LocalDateTime startDate
     );
+
+
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "LEFT JOIN p.tagList t " +
+            "WHERE (" +
+            "   (:tags IS NULL OR t.name IN :tags) " +
+            ") " +
+            "AND ( LOWER(p.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :searchTerm, '%')) )" )
+    List<Post> findFilteredPostsByKeywordAndTags(@Param("searchTerm") String keyword,
+                                                 @Param("tags") List<String> tags);
 }

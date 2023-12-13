@@ -160,8 +160,10 @@
                             </div>
                             </div>
                         </a>
+                        <div th:each="tag : ${post.tagList}" class="post-tags" >
+                            <button th:text="${tag.name}" style="color: red;"></button>
+                        </div>
                     </div>
-
                     <div class="comment-count">
                         <i class="fa-regular fa-message"></i>
                         <span th:text="${post.getCount(post.getCommentList())}"></span>

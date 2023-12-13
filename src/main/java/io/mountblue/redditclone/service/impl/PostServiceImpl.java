@@ -71,6 +71,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getFilteredPostsByKeywordAndTags(String keyword, List<String> tags) {
+        return postRepository.findFilteredPostsByKeywordAndTags(keyword,tags);
+    }
+
+    @Override
     public void updatePost(Post updatedPost, Integer postId, String tagNames) {
         Set<Tag> tagFromString = getTagFromString(tagNames);
         Post oldPost = findById(postId);

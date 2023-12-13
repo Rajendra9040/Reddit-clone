@@ -2,6 +2,7 @@ package io.mountblue.redditclone.service;
 
 import org.springframework.ui.Model;
 import io.mountblue.redditclone.entity.Post;
+import io.mountblue.redditclone.entity.Tag;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,8 @@ public interface PostService {
     Post findById(Integer userId);
 
     List<Post> findBySubRedditId(Integer subRedditId);
+
+    List<Post> getFilteredPostsByKeywordAndTags(String keyword, List<String> tags);
 
     void updatePost(Post updatedPost,Integer postId, String tagNames);
 

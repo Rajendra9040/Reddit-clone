@@ -4,10 +4,7 @@ import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
 import io.mountblue.redditclone.entity.*;
-import io.mountblue.redditclone.service.CommentService;
-import io.mountblue.redditclone.service.PostService;
-import io.mountblue.redditclone.service.SubRedditService;
-import io.mountblue.redditclone.service.UserService;
+import io.mountblue.redditclone.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -33,9 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 import java.util.List;
 
@@ -46,6 +41,7 @@ public class PostController {
     private final UserService userService;
     private final SubRedditService subRedditService;
     private final CommentService commentService;
+    private final TagService tagService;
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder){
@@ -55,11 +51,13 @@ public class PostController {
 
     @Autowired
     PostController(PostService postService, UserService userService,
-                   SubRedditService subRedditService, CommentService commentService){
+                   SubRedditService subRedditService, CommentService commentService,
+                   TagService tagService){
         this.postService = postService;
         this.userService = userService;
         this.subRedditService = subRedditService;
         this.commentService = commentService;
+        this.tagService = tagService;
     }
 
     @GetMapping("/posts/createPost")
@@ -327,6 +325,9 @@ public class PostController {
             }
         }
 
+        Set<String> tags = tagService.findAllTags();
+
+        model.addAttribute("tags",tags);
         model.addAttribute("allPosts", allPosts);
         model.addAttribute("subRedditList", subRedditList);
         model.addAttribute("sort", sort);
@@ -431,5 +432,53 @@ public class PostController {
         model.addAttribute("query", query);
         model.addAttribute("bookmark",ids);
         return "searchResult";
+    }
+
+    @GetMapping("/filter")
+    public String showFilterResultPage(Model model,@AuthenticationPrincipal UserDetails userDetails,
+                                       @RequestParam(required = false) String keyword,
+                                       @RequestParam(required = false) List<String> tags) throws IOException {
+
+        if (tags != null && tags.isEmpty()) {
+            tags = null;
+        }
+        if (keyword == null) {
+            keyword = "";
+        }
+        keyword = keyword.trim();
+        List<Post> posts = new ArrayList<>();
+        posts = postService.getFilteredPostsByKeywordAndTags( keyword, tags);
+
+            for(Post post : posts){
+                if(post.getPhotoName()!= null){
+                    String fileName = post.getPhotoName();
+                    // Download file from Firebase Storage
+                    Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("./serviceAccountKey.json"));
+                    Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+                    Blob blob = storage.get(BlobId.of("reddit-clone-f5e1d.appspot.com", fileName));
+
+                    String contentType = post.getPhotoType();
+                    String base64Image = Base64.getEncoder().encodeToString(blob.getContent());
+                    post.setPhotoType(contentType);
+                    post.setImage(base64Image);
+                }
+            }
+            model.addAttribute("allPosts", posts);
+
+
+        User user = userService.findByUsername(userDetails.getUsername());
+        List<Bookmark> bookmarkList = user.getBookmarkList();
+        List<Integer> ids = new ArrayList<>();
+
+        for(Bookmark bookmark: bookmarkList) {
+            ids.add(bookmark.getPost().getId());
+        }
+
+        List<SubReddit> subRedditList = subRedditService.findAll();
+        model.addAttribute("subRedditList",subRedditList);
+
+        model.addAttribute("query", keyword);
+        model.addAttribute("bookmark",ids);
+        return "filterPage";
     }
 }

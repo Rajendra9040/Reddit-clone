@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -65,5 +64,4 @@ public class SubReddit {
 
     @OneToMany(mappedBy = "subReddit",cascade = CascadeType.ALL)
     List<Post> postList;
-
 }

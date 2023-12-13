@@ -10,7 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "roles")
@@ -49,4 +50,5 @@ public class Role implements GrantedAuthority {
     public int hashCode() {
         return this.role.hashCode();
     }
+
 }

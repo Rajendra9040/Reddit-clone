@@ -19,7 +19,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "comments")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -48,7 +47,4 @@ public class Comment {
 
     @OneToMany(mappedBy="comment", cascade = CascadeType.ALL)
     List<VoteComment> voteComments;
-
-
-
 }

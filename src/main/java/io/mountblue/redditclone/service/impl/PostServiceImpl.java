@@ -1,5 +1,6 @@
 package io.mountblue.redditclone.service.impl;
 
+import org.springframework.ui.Model;
 import io.mountblue.redditclone.entity.Post;
 import io.mountblue.redditclone.entity.SubReddit;
 import io.mountblue.redditclone.entity.Tag;
@@ -10,6 +11,9 @@ import io.mountblue.redditclone.service.PostService;
 import io.mountblue.redditclone.service.SubRedditService;
 import io.mountblue.redditclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +25,7 @@ import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
-
+    private static final int pageSize = 3;
     private PostRepository postRepository;
     private UserService userService;
     private SubRedditService subRedditService;
@@ -164,8 +168,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAllOrderByVoteCountDesc() {
-        return postRepository.findAllOrderByVoteCountDesc();
+    public List<Post> findAllOrderByVoteCountDesc(Model model, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber-1, PostServiceImpl.pageSize);
+        Page<Post> page = postRepository.findAllOrderByVoteCountDesc(pageable);
+
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", pageNumber);
+        return page.getContent();
     }
 
     @Override

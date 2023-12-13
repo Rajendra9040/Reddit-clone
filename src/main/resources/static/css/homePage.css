@@ -353,3 +353,8 @@ table .control-buttons-container {
     color: white;
 }
 
+.pagination a {
+    color: blue;
+}
+
+

@@ -128,11 +128,17 @@
             <div class="filter-section" id="filterSection">
                 <form th:action="@{/filter}" method="get">
                     <label for="keyword">Keyword:</label>
-                    <input type="text" id="keyword" name="keyword" th:value="${keyword}" />
+                    <input type="text" id="keyword" name="keyword" th:value="${keyword}" /> <br><br>
 
                     <label for="tags">Tags:</label>
                     <select id="tags" name="tags" multiple="multiple">
                         <option th:each="tag : ${tags}" th:value="${tag}" th:text="${tag}" />
+                    </select> <br><br>
+
+                    <label for="communities">Community :</label>
+                    <select id="communities" name="community" >
+                        <option value="">None</option>
+                        <option th:each="community : ${subRedditList}" th:value="${community.name}" th:text="${community.name}" />
                     </select>
                     <br><br>
                     <button class="filterButton" type="submit" onclick="applyFilters()">Apply Filters</button>

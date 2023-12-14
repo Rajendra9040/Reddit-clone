@@ -436,6 +436,7 @@ public class PostController {
     @GetMapping("/filter")
     public String showFilterResultPage(Model model,@AuthenticationPrincipal UserDetails userDetails,
                                        @RequestParam(required = false) String keyword,
+                                       @RequestParam(required = false) String community,
                                        @RequestParam(required = false) List<String> tags) throws IOException {
 
         if (tags != null && tags.isEmpty()) {
@@ -444,6 +445,10 @@ public class PostController {
         if (keyword == null) {
             keyword = "";
         }
+        if(community.equals("")){
+            community = null;
+        }
+
         keyword = keyword.trim();
         List<Post> posts = new ArrayList<>();
         posts = postService.getFilteredPostsByKeywordAndTags( keyword, tags);
@@ -463,6 +468,14 @@ public class PostController {
                 }
             }
             model.addAttribute("allPosts", posts);
+
+        Iterator<Post> iterator = posts.iterator();
+        while (iterator.hasNext()) {
+            Post post = iterator.next();
+            if (community!=null && !post.getSubReddit().getName().equals(community)) {
+                iterator.remove();  // Safe removal using Iterator
+            }
+        }
 
 
         User user = userService.findByUsername(userDetails.getUsername());

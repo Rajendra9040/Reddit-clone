@@ -1,5 +1,6 @@
 package io.mountblue.redditclone.service;
 
+import org.springframework.ui.Model;
 import io.mountblue.redditclone.entity.Post;
 import io.mountblue.redditclone.entity.Tag;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,7 @@ public interface PostService {
 
     List<Post> findAllBySubscribedSubReddits(String username);
 
-    List<Post> findAllOrderByVoteCountDesc();
+    List<Post> findAllOrderByVoteCountDesc(Model model, int pageNumber);
 
     List<Post> findAllPostsOrderedByCommentsSizeDesc();
 

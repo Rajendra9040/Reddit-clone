@@ -285,9 +285,10 @@ public class PostController {
 
     @GetMapping("/")
     public String showPopularPage(Model model,@AuthenticationPrincipal UserDetails userDetails,
-                                  @RequestParam(name = "sort", defaultValue = "Top") String sort) throws IOException {
+                                  @RequestParam(name = "sort", defaultValue = "Top") String sort,
+                                  @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber) throws IOException {
         List<Post> allPosts = switch (sort) {
-            case "Top" -> postService.findAllOrderByVoteCountDesc();
+            case "Top" -> postService.findAllOrderByVoteCountDesc(model, pageNumber);
             case "Hot" -> postService.findAllPostsOrderedByCommentsSizeDesc();
             case "New" -> postService.findAllOrderByCreatedAtDesc();
             case "Old" -> postService.findAllOrderByCreatedAt();

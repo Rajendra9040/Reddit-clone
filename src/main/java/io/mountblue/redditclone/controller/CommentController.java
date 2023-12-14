@@ -159,8 +159,6 @@ public class CommentController {
         String subredditName = subreddit.getName();
         commentService.updateComment(commentId,editComment,postId);
 
-
-
         return "redirect:/"+subredditName+"/posts/"+postId+"/comments";
     }
 
@@ -174,7 +172,6 @@ public class CommentController {
         Post post = postService.findById(postId);
         SubReddit subreddit = post.getSubReddit();
         String subredditName = subreddit.getName();
-
 
         return "redirect:/"+subredditName+"/posts/"+postId+"/comments";
     }

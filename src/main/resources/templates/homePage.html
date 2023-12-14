@@ -241,7 +241,6 @@
                             </button>
                         </div>
 
-
                     </div>
 
                         <div class="comment-count">
@@ -265,7 +264,29 @@
                         </div>
                 </div>
             </div>
+        </div>
 
+        <div>
+            <ul class="pagination">
+                <li th:if="${currentPage > 1}" style="display: inline-block;">
+                    <a th:with="prevPage=${currentPage - 1}, direction=${direction}, field=${field}"
+                       th:href="@{'/?pageNumber=' + ${prevPage}}">
+                        Previous</a>
+                </li>
+
+                <li th:each="pageNumber : ${totalPages != null ? #numbers.sequence(1, totalPages) : {}}"
+                    style="display: inline-block;">
+                    <a th:href="@{'/?pageNumber=' + ${pageNumber}}"
+                       th:text="${pageNumber}"></a>
+                </li>
+
+                <li th:if="${currentPage < totalPages}" style="display: inline-block;">
+                    <a th:with="nextPage=${currentPage + 1}, direction=${direction}, field=${field}"
+                       th:href="@{'/?pageNumber=' + ${nextPage}}">
+                        Next
+                    </a>
+                </li>
+            </ul>
         </div>
     </main>
 
@@ -288,47 +309,7 @@
                 <p><a th:href="@{/posts/createPost}"> <button>Create Post</button></a></p>
             </div>
         </div>
-<!--        <div class="policy">-->
-<!--       <div class="one">-->
 
-<!--    <ul>-->
-<!--        <li>User Agreement</li>-->
-<!--        <li>Privacy Policy</li>-->
-
-<!--    </ul>-->
-<!--       </div>-->
-<!--       </div>-->
-<!--            <div class="one">-->
-<!--              <p>Content Policy</p>-->
-<!--               <p>Moderator Code Of Conduct</p>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--               <p>English</p>-->
-<!--               <p>Francais</p>-->
-<!--                <p>Italiano</p>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--               <p>Deutsch</p>-->
-<!--                <p>Espanol</p>-->
-<!--                <p>Portugues</p>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <p>Reddit,Inc. 2023.All rights reserved</p>-->
-<!--            </div>-->
-
-<!--</div>-->
-<!--        <div class="aside-button">-->
-<!--            <p><a th:href="@{/community/createCommunity}"> <button>Create Community</button></a></p>-->
-<!--            <p><a th:href="@{/posts/createPost}"> <button>Create Post</button></a></p>-->
-<!--        </div>-->
-
-<!--        <div class="community-container">-->
-<!--            <div class="community-item" th:each="subReddit : ${subRedditList}">-->
-<!--                <a th:href="@{'community/' + ${subReddit.getName()} }">-->
-<!--                    <span th:text="${subReddit.getName()}"></span>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
     </aside>
 </div>
 </body>
